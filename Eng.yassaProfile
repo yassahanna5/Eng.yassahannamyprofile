@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberSec Dev | Full-Stack Developer & Cybersecurity Specialist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        :root {
+            --neon-green: #0f0;
+            --cyber-blue: #00f5ff;
+            --electric-purple: #b300ff;
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: rgba(15, 15, 15, 0.8);
+            --text-light: #e0e0e0;
+        }
+
+        /* Light Mode Variables */
+        [data-theme="light"] {
+            --dark-bg: #f8f9fa;
+            --darker-bg: #e9ecef;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-light: #333333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .code-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="light"] .navbar {
+            background-color: rgba(248, 249, 250, 0.9);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--neon-green) !important;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: radial-gradient(circle at 30% 50%, rgba(11, 29, 64, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 20%, rgba(51, 0, 102, 0.3) 0%, transparent 50%);
+        }
+
+        [data-theme="light"] .hero {
+            background: radial-gradient(circle at 30% 50%, rgba(173, 216, 230, 0.4) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 20%, rgba(221, 160, 221, 0.3) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue), var(--electric-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-light);
+        }
+
+        .typing-text {
+            border-right: 2px solid var(--neon-green);
+            animation: blink 0.7s infinite;
+            padding-right: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { border-color: var(--neon-green); }
+            50% { border-color: transparent; }
+        }
+
+        .btn-cyber {
+            background: transparent;
+            color: var(--neon-green);
+            border: 1px solid var(--neon-green);
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+
+        .btn-cyber::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .btn-cyber:hover {
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .btn-cyber:hover::before {
+            left: 100%;
+        }
+
+        .btn-cyber-primary {
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+            color: var(--dark-bg);
+            border: none;
+        }
+
+        .btn-cyber-primary:hover {
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        /* Section Styles */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+        }
+
+        .section-bg {
+            background-color: var(--darker-bg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 10% 20%, rgba(0, 245, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(179, 0, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        [data-theme="light"] .section-bg::before {
+            background: radial-gradient(circle at 10% 20%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 90% 80%, rgba(179, 0, 255, 0.1) 0%, transparent 50%);
+        }
+
+        /* About Section */
+        .about-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .glitch-effect {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-effect::before,
+        .glitch-effect::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch-effect::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--electric-purple);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim 5s infinite linear alternate-reverse;
+        }
+
+        .glitch-effect::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--cyber-blue);
+            clip: rect(44px, 450px, 56px, 0);
+            animation: glitch-anim2 5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); }
+            5% { clip: rect(12px, 9999px, 59px, 0); }
+            10% { clip: rect(48px, 9999px, 29px, 0); }
+            15% { clip: rect(42px, 9999px, 73px, 0); }
+            20% { clip: rect(63px, 9999px, 27px, 0); }
+            25% { clip: rect(34px, 9999px, 55px, 0); }
+            30% { clip: rect(86px, 9999px, 73px, 0); }
+            35% { clip: rect(20px, 9999px, 20px, 0); }
+            40% { clip: rect(26px, 9999px, 60px, 0); }
+            45% { clip: rect(25px, 9999px, 66px, 0); }
+            50% { clip: rect(57px, 9999px, 98px, 0); }
+            55% { clip: rect(5px, 9999px, 46px, 0); }
+            60% { clip: rect(82px, 9999px, 31px, 0); }
+            65% { clip: rect(54px, 9999px, 27px, 0); }
+            70% { clip: rect(28px, 9999px, 99px, 0); }
+            75% { clip: rect(45px, 9999px, 69px, 0); }
+            80% { clip: rect(23px, 9999px, 85px, 0); }
+            85% { clip: rect(54px, 9999px, 84px, 0); }
+            90% { clip: rect(45px, 9999px, 47px, 0); }
+            95% { clip: rect(37px, 9999px, 20px, 0); }
+            100% { clip: rect(4px, 9999px, 91px, 0); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            5% { clip: rect(52px, 9999px, 74px, 0); }
+            10% { clip: rect(79px, 9999px, 85px, 0); }
+            15% { clip: rect(75px, 9999px, 5px, 0); }
+            20% { clip: rect(67px, 9999px, 61px, 0); }
+            25% { clip: rect(14px, 9999px, 79px, 0); }
+            30% { clip: rect(1px, 9999px, 66px, 0); }
+            35% { clip: rect(86px, 9999px, 30px, 0); }
+            40% { clip: rect(23px, 9999px, 98px, 0); }
+            45% { clip: rect(85px, 9999px, 72px, 0); }
+            50% { clip: rect(71px, 9999px, 75px, 0); }
+            55% { clip: rect(2px, 9999px, 48px, 0); }
+            60% { clip: rect(30px, 9999px, 16px, 0); }
+            65% { clip: rect(59px, 9999px, 50px, 0); }
+            70% { clip: rect(41px, 9999px, 62px, 0); }
+            75% { clip: rect(2px, 9999px, 82px, 0); }
+            80% { clip: rect(47px, 9999px, 73px, 0); }
+            85% { clip: rect(3px, 9999px, 27px, 0); }
+            90% { clip: rect(26px, 9999px, 55px, 0); }
+            95% { clip: rect(42px, 9999px, 97px, 0); }
+            100% { clip: rect(38px, 9999px, 49px, 0); }
+        }
+
+        /* Skills Section */
+        .skill-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.05), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .skill-card:hover::before {
+            left: 100%;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-green);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.1);
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Projects Section */
+        .project-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--neon-green);
+            box-shadow: 0 10px 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .project-img {
+            height: 200px;
+            background: linear-gradient(135deg, var(--electric-purple), var(--cyber-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+        }
+
+        .project-content {
+            padding: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .project-tag {
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--cyber-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Contact Section */
+        .contact-form {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .form-control {
+            background-color: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            color: var(--text-light);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+        }
+
+        [data-theme="light"] .form-control {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            color: #333;
+        }
+
+        .form-control:focus {
+            background-color: rgba(20, 20, 20, 0.9);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.1);
+            color: var(--text-light);
+        }
+
+        [data-theme="light"] .form-control:focus {
+            background-color: rgba(255, 255, 255, 1);
+            color: #333;
+        }
+
+        .form-label {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        [data-theme="light"] .form-label {
+            color: #333;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--darker-bg);
+            border-top: 1px solid rgba(0, 245, 255, 0.1);
+            padding: 3rem 0 1.5rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--cyber-blue);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+        }
+
+        /* Matrix Background */
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Admin Panel Styles */
+        .sidebar {
+            background-color: var(--darker-bg);
+            border-right: 1px solid rgba(0, 245, 255, 0.1);
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+        }
+
+        .sidebar .nav-link {
+            color: var(--text-light);
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: var(--neon-green);
+            background-color: rgba(0, 245, 255, 0.05);
+        }
+
+        .admin-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+        }
+
+        .badge-cyber {
+            background: rgba(0, 245, 255, 0.1);
+            color: var(--cyber-blue);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn.edit:hover {
+            color: var(--neon-green);
+        }
+
+        .action-btn.delete:hover {
+            color: #ff4757;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-card .stats-title {
+            color: var(--cyber-blue);
+            font-size: 0.9rem;
+        }
+
+        .update-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--neon-green);
+            color: var(--dark-bg);
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.3);
+            display: none;
+        }
+
+        /* Login Styles */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid rgba(0, 245, 255, 0.1);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+        }
+
+        .divider span {
+            padding: 0 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .close-login {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-login:hover {
+            color: var(--neon-green);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Website -->
+    <div id="main-website">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand code-font" href="#">CyberSec<span style="color: var(--neon-green);">Dev</span></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#skills">Skills</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#projects">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact">Contact</a>
+                        </li>
+                        <li class="nav-item d-flex align-items-center">
+                            <a class="nav-link btn-cyber ms-2" href="#" onclick="showLogin()">Admin Login</a>
+                            <button class="theme-toggle" id="themeToggle" title="Toggle Light/Dark Mode">
+                                <i class="fas fa-moon"></i>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+            <div class="container hero-content">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h1>Full-Stack Developer & <span class="glitch-effect" data-text="Cybersecurity Specialist">Cybersecurity Specialist</span></h1>
+                        <p class="typing-text" id="typing-text">Building secure digital solutions for the future.</p>
+                        <div class="mt-4">
+                            <a href="#projects" class="btn btn-cyber btn-cyber-primary me-3">View My Work</a>
+                            <a href="#contact" class="btn btn-cyber">Get In Touch</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 text-center">
+                        <div class="hero-illustration">
+                            <div class="project-img" style="height: 300px; border-radius: 10px;">
+                                <i class="fas fa-lock" style="font-size: 8rem; color: rgba(255,255,255,0.1);"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="py-5 section-bg">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="about-content">
+                            <h3 class="mb-4">Hello, I'm <span style="color: var(--neon-green);" id="aboutName">Eng.yassa hanna</span></h3>
+                            <p class="mb-4" id="aboutContent">I'm a passionate full-stack developer and cybersecurity specialist with over 7 years of experience building secure, scalable web applications and protecting digital assets from modern threats.</p>
+                            <p class="mb-4">My journey began in ethical hacking, which evolved into a passion for creating robust applications that prioritize security from the ground up.</p>
+                            <div class="row mt-5">
+                                <div class="col-md-6 mb-3">
+                                    <h5 class="code-font" style="color: var(--cyber-blue);">Name:</h5>
+                                    <p id="aboutNameInfo">Eng.yassa hanna</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h5 class="code-font" style="color: var(--cyber-blue);">Email:</h5>
+                                    <p id="aboutEmail">yassahanna5@gmail.com</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h5 class="code-font" style="color: var(--cyber-blue);">Location:</h5>
+                                    <p id="aboutLocation">Minia, Egypt</p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h5 class="code-font" style="color: var(--cyber-blue);">Availability:</h5>
+                                    <p>Available for projects</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="skill-card">
+                            <h4 class="mb-4">My Expertise</h4>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Web Development</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar" role="progressbar" style="width: 95%; background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Cybersecurity</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar" role="progressbar" style="width: 90%; background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Penetration Testing</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar" role="progressbar" style="width: 85%; background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));"></div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Cloud Security</span>
+                                    <span>80%</span>
+                                </div>
+                                <div class="progress" style="height: 8px; background-color: rgba(255,255,255,0.1);">
+                                    <div class="progress-bar" role="progressbar" style="width: 80%; background: linear-gradient(90deg, var(--neon-green), var(--cyber-blue));"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-5">
+            <div class="container">
+                <h2 class="section-title">My Skills</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="skill-card text-center">
+                            <div class="skill-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>Full-Stack Development</h4>
+                            <p>Building responsive, scalable web applications using modern technologies like React, Node.js, and Python.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="skill-card text-center">
+                            <div class="skill-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4>Cybersecurity</h4>
+                            <p>Implementing security measures, vulnerability assessments, and penetration testing to protect digital assets.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="skill-card text-center">
+                            <div class="skill-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <h4>Cloud Security</h4>
+                            <p>Securing cloud infrastructure and applications on AWS, Azure, and GCP with best practices and tools.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-5 section-bg">
+            <div class="container">
+                <h2 class="section-title">My Projects</h2>
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-cyber active" data-filter="all">All</button>
+                            <button type="button" class="btn btn-cyber" data-filter="web">Web Dev</button>
+                            <button type="button" class="btn btn-cyber" data-filter="security">Security</button>
+                            <button type="button" class="btn btn-cyber" data-filter="fullstack">Full-Stack</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="projects-grid">
+                    <!-- Projects will be loaded dynamically from Firebase -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-5">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <div class="contact-form">
+                            <form id="contactForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Your Email</label>
+                                        <input type="email" class="form-control" id="email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject</label>
+                                    <input type="text" class="form-control" id="subject" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message</label>
+                                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-cyber btn-cyber-primary">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+                <p class="text-center mb-0">&copy; 2025 CyberSecDev. All rights reserved by Eng.yassa hanna.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Admin Panel (Hidden by default) -->
+    <div id="admin-panel" style="display: none;">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <div class="sidebar-header">
+                        <h3>Admin Panel</h3>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class="fas fa-tachometer-alt"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#projects-section">
+                                <i class="fas fa-project-diagram"></i> Projects
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#messages-section">
+                                <i class="fas fa-envelope"></i> Messages
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#about-section">
+                                <i class="fas fa-address-card"></i> About
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#contact-section">
+                                <i class="fas fa-phone"></i> Contact
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="showMainWebsite()">
+                                <i class="fas fa-eye"></i> View Site
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <div class="admin-header">
+                        <h4>Admin Dashboard</h4>
+                        <div>
+                            <span class="me-3">Welcome, Admin</span>
+                            <button class="btn btn-cyber" onclick="logout()">Logout</button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="admin-card text-center stats-card">
+                                <div class="stats-number" style="color: var(--neon-green);" id="projectsCount">0</div>
+                                <div class="stats-title">Total Projects</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-card text-center stats-card">
+                                <div class="stats-number" style="color: var(--cyber-blue);" id="messagesCount">0</div>
+                                <div class="stats-title">Messages</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-card text-center stats-card">
+                                <div class="stats-number" style="color: var(--electric-purple);">0</div>
+                                <div class="stats-title">Visitors</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="admin-card text-center stats-card">
+                                <div class="stats-number" style="color: var(--neon-green);">100%</div>
+                                <div class="stats-title">Live Updates</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages Management -->
+                    <div class="admin-card" id="messages-section">
+                        <h4 class="mb-4">Messages Management</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="messagesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Subject</th>
+                                        <th>Message</th>
+                                        <th>Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="messagesTableBody">
+                                    <!-- Messages will be loaded here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Projects Management -->
+                    <div class="admin-card" id="projects-section">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4>Projects Management</h4>
+                            <button class="btn btn-cyber btn-cyber-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                                <i class="fas fa-plus me-2"></i>Add New Project
+                            </button>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="projectsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Category</th>
+                                        <th>Tags</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="projectsTableBody">
+                                    <!-- Projects will be loaded here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Content Editing -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="admin-card" id="about-section">
+                                <h4 class="mb-4">Edit About Section</h4>
+                                <form id="aboutForm">
+                                    <div class="mb-3">
+                                        <label for="adminAboutName" class="form-label">Your Name</label>
+                                        <input type="text" class="form-control" id="adminAboutName" value="Eng.yassa hanna">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adminAboutContent" class="form-label">About Content</label>
+                                        <textarea class="form-control" id="adminAboutContent" rows="5">I'm a passionate full-stack developer and cybersecurity specialist with over 7 years of experience building secure, scalable web applications and protecting digital assets from modern threats.</textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adminAboutEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="adminAboutEmail" value="yassahanna5@gmail.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adminAboutLocation" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="adminAboutLocation" value="Minia, Egypt">
+                                    </div>
+                                    <button type="submit" class="btn btn-cyber btn-cyber-primary">Update About Section</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="admin-card" id="contact-section">
+                                <h4 class="mb-4">Edit Contact Information</h4>
+                                <form id="contactAdminForm">
+                                    <div class="mb-3">
+                                        <label for="adminContactEmail" class="form-label">Contact Email</label>
+                                        <input type="email" class="form-control" id="adminContactEmail" value="yassahanna5@gmail.com">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adminContactPhone" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="adminContactPhone" value="+20 123 456 7890">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="adminContactLocation" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="adminContactLocation" value="Minia, Egypt">
+                                    </div>
+                                    <button type="submit" class="btn btn-cyber btn-cyber-primary">Update Contact Info</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Panel (Hidden by default) -->
+    <div id="login-panel" class="login-container">
+        <div class="login-card">
+            <button class="close-login" onclick="hideLogin()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="login-header">
+                <h2>Admin Login</h2>
+                <p>Access the administrator control panel</p>
+            </div>
+            
+            <div id="loginAlert" class="alert alert-danger d-none" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span id="alertMessage">Invalid credentials</span>
+            </div>
+            
+            <form id="adminLoginForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Enter admin username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter admin password" required>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn btn-cyber btn-cyber-primary">Admin Login</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a href="#" class="text-decoration-none" style="color: var(--cyber-blue);" onclick="hideLogin()">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Main Site
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background-color: var(--card-bg); color: var(--text-light);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 245, 255, 0.1);">
+                    <h5 class="modal-title" id="addProjectModalLabel">Add New Project</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProjectForm">
+                        <div class="mb-3">
+                            <label for="projectTitle" class="form-label">Project Title</label>
+                            <input type="text" class="form-control" id="projectTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectDescription" class="form-label">Project Description</label>
+                            <textarea class="form-control" id="projectDescription" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectCategory" class="form-label">Project Category</label>
+                            <select class="form-control" id="projectCategory" required>
+                                <option value="web">Web Development</option>
+                                <option value="security">Security</option>
+                                <option value="fullstack">Full-Stack</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectIcon" class="form-label">Project Icon (FontAwesome class)</label>
+                            <input type="text" class="form-control" id="projectIcon" value="fas fa-code" required>
+                            <small class="text-muted">e.g., fas fa-shield-alt, fas fa-lock, fas fa-cloud</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectTags" class="form-label">Project Tags (comma separated)</label>
+                            <input type="text" class="form-control" id="projectTags" placeholder="React, Node.js, Security" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(0, 245, 255, 0.1);">
+                    <button type="button" class="btn btn-cyber" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-cyber btn-cyber-primary" onclick="addProject()">Add Project</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Alert -->
+    <div class="update-alert" id="updateAlert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span id="alertMessage">Content updated successfully!</span>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Firebase & Custom JS -->
+    <script>
+        // Firebase configuration for yassaprofile
+        const firebaseConfig = {
+            apiKey: "AIzaSyCT1oq5m43Vtx0uRk4V116BVawmND_YhBY",
+            authDomain: "yassaprofile.firebaseapp.com",
+            projectId: "yassaprofile",
+            storageBucket: "yassaprofile.firebasestorage.app",
+            messagingSenderId: "153752906886",
+            appId: "1:153752906886:web:2ae615e64c13d11a4c7507"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Default data
+        const defaultProjects = [
+            {
+                id: "project1",
+                title: "SecureAuth System",
+                description: "A multi-factor authentication system with biometric verification and behavioral analysis for enhanced security.",
+                category: "web",
+                icon: "fas fa-shield-alt",
+                tags: ["React", "Node.js", "Biometrics"]
+            },
+            {
+                id: "project2",
+                title: "Vulnerability Scanner",
+                description: "An automated tool for detecting security vulnerabilities in web applications and network infrastructure.",
+                category: "security",
+                icon: "fas fa-search",
+                tags: ["Python", "Security", "Automation"]
+            }
+        ];
+
+        const defaultAbout = {
+            name: "Eng.yassa hanna",
+            content: "I'm a passionate full-stack developer and cybersecurity specialist with over 7 years of experience building secure, scalable web applications and protecting digital assets from modern threats.",
+            email: "yassahanna5@gmail.com",
+            location: "Minia, Egypt"
+        };
+
+        const defaultContact = {
+            email: "yassahanna5@gmail.com",
+            phone: "+20 123 456 7890",
+            location: "Minia, Egypt"
+        };
+
+        // Theme Toggle Functionality
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const themeToggle = document.getElementById('themeToggle');
+            
+            if (currentTheme === 'light') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Initialize theme from localStorage
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            const themeToggle = document.getElementById('themeToggle');
+            
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            if (savedTheme === 'light') {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        // Show login panel
+        function showLogin() {
+            document.getElementById('login-panel').style.display = 'flex';
+        }
+
+        // Hide login panel
+        function hideLogin() {
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('loginAlert').classList.add('d-none');
+            document.getElementById('adminLoginForm').reset();
+        }
+
+        // Show admin panel
+        function showAdminPanel() {
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('main-website').style.display = 'none';
+        }
+
+        // Show main website
+        function showMainWebsite() {
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('login-panel').style.display = 'none';
+            document.getElementById('main-website').style.display = 'block';
+        }
+
+        // Initialize data
+        async function initializeData() {
+            try {
+                // Check if about data exists
+                const aboutDoc = await db.collection('portfolio').doc('about').get();
+                if (!aboutDoc.exists) {
+                    await db.collection('portfolio').doc('about').set(defaultAbout);
+                }
+
+                // Check if contact data exists
+                const contactDoc = await db.collection('portfolio').doc('contact').get();
+                if (!contactDoc.exists) {
+                    await db.collection('portfolio').doc('contact').set(defaultContact);
+                }
+
+                // Check if projects exist
+                const projectsSnapshot = await db.collection('projects').get();
+                if (projectsSnapshot.empty) {
+                    // Add default projects
+                    for (const project of defaultProjects) {
+                        await db.collection('projects').doc(project.id).set(project);
+                    }
+                }
+
+                console.log('Data initialized successfully');
+                loadContent();
+            } catch (error) {
+                console.error('Error initializing data:', error);
+            }
+        }
+
+        // Load content from Firestore
+        function loadContent() {
+            // Load projects
+            db.collection('projects').onSnapshot((snapshot) => {
+                const projects = [];
+                snapshot.forEach((doc) => {
+                    projects.push(doc.data());
+                });
+                updateProjectsGrid(projects);
+                updateProjectsTable(projects);
+            });
+
+            // Load about content
+            db.collection('portfolio').doc('about').onSnapshot((doc) => {
+                const about = doc.data();
+                if (about) {
+                    updateAboutSection(about);
+                    updateAboutForm(about);
+                }
+            });
+
+            // Load contact info
+            db.collection('portfolio').doc('contact').onSnapshot((doc) => {
+                const contact = doc.data();
+                if (contact) {
+                    updateContactForm(contact);
+                }
+            });
+
+            // Load messages
+            db.collection('messages').orderBy('timestamp', 'desc').onSnapshot((snapshot) => {
+                const messages = [];
+                snapshot.forEach((doc) => {
+                    messages.push({id: doc.id, ...doc.data()});
+                });
+                updateMessagesTable(messages);
+                updateMessagesCount(messages.length);
+            });
+        }
+
+        // Update projects grid in main website
+        function updateProjectsGrid(projects) {
+            const projectsGrid = document.getElementById('projects-grid');
+            if (!projectsGrid) return;
+
+            projectsGrid.innerHTML = '';
+            
+            projects.forEach(project => {
+                const projectCard = `
+                    <div class="col-lg-4 col-md-6 mb-4" data-category="${project.category}">
+                        <div class="project-card">
+                            <div class="project-img">
+                                <i class="${project.icon}" style="font-size: 4rem; color: rgba(255,255,255,0.2);"></i>
+                            </div>
+                            <div class="project-content">
+                                <h4>${project.title}</h4>
+                                <p>${project.description}</p>
+                                <div class="project-tags">
+                                    ${project.tags.map(tag => `<span class="project-tag">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                projectsGrid.innerHTML += projectCard;
+            });
+
+            // Re-attach filter functionality
+            attachProjectFilters();
+        }
+
+        // Update projects table in admin panel
+        function updateProjectsTable(projects) {
+            const tableBody = document.getElementById('projectsTableBody');
+            const projectsCount = document.getElementById('projectsCount');
+            
+            if (!tableBody) return;
+            
+            projectsCount.textContent = projects.length;
+            tableBody.innerHTML = '';
+            
+            projects.forEach(project => {
+                const row = `
+                    <tr>
+                        <td>${project.title}</td>
+                        <td><span class="badge-cyber">${project.category}</span></td>
+                        <td>${project.tags.map(tag => `<span class="badge-cyber">${tag}</span>`).join(' ')}</td>
+                        <td>
+                            <button class="action-btn edit" onclick="editProject('${project.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteProject('${project.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Update messages table in admin panel
+        function updateMessagesTable(messages) {
+            const tableBody = document.getElementById('messagesTableBody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            messages.forEach(message => {
+                const date = message.timestamp ? new Date(message.timestamp.seconds * 1000).toLocaleDateString() : 'N/A';
+                const row = `
+                    <tr>
+                        <td>${message.name}</td>
+                        <td>${message.email}</td>
+                        <td>${message.subject}</td>
+                        <td>${message.message.substring(0, 50)}${message.message.length > 50 ? '...' : ''}</td>
+                        <td>${date}</td>
+                        <td>
+                            <button class="action-btn edit" onclick="viewMessage('${message.id}')" title="View Message">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteMessage('${message.id}')" title="Delete Message">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Update messages count
+        function updateMessagesCount(count) {
+            const messagesCount = document.getElementById('messagesCount');
+            if (messagesCount) {
+                messagesCount.textContent = count;
+            }
+        }
+
+        // Update about section in main website
+        function updateAboutSection(about) {
+            if (about.name) {
+                document.getElementById('aboutName').textContent = about.name;
+                document.getElementById('aboutNameInfo').textContent = about.name;
+            }
+            
+            if (about.content) {
+                document.getElementById('aboutContent').textContent = about.content;
+            }
+
+            if (about.email) {
+                document.getElementById('aboutEmail').textContent = about.email;
+            }
+
+            if (about.location) {
+                document.getElementById('aboutLocation').textContent = about.location;
+            }
+        }
+
+        // Update about form in admin panel
+        function updateAboutForm(about) {
+            if (about) {
+                document.getElementById('adminAboutName').value = about.name || '';
+                document.getElementById('adminAboutContent').value = about.content || '';
+                document.getElementById('adminAboutEmail').value = about.email || '';
+                document.getElementById('adminAboutLocation').value = about.location || '';
+            }
+        }
+
+        // Update contact form in admin panel
+        function updateContactForm(contact) {
+            if (contact) {
+                document.getElementById('adminContactEmail').value = contact.email || '';
+                document.getElementById('adminContactPhone').value = contact.phone || '';
+                document.getElementById('adminContactLocation').value = contact.location || '';
+            }
+        }
+
+        // Add new project
+        async function addProject() {
+            const title = document.getElementById('projectTitle').value;
+            const description = document.getElementById('projectDescription').value;
+            const category = document.getElementById('projectCategory').value;
+            const icon = document.getElementById('projectIcon').value;
+            const tags = document.getElementById('projectTags').value.split(',').map(tag => tag.trim());
+            
+            if (title && description && category && icon) {
+                try {
+                    const newProjectId = 'project' + Date.now();
+                    const newProject = {
+                        id: newProjectId,
+                        title,
+                        description,
+                        category,
+                        icon,
+                        tags
+                    };
+                    
+                    await db.collection('projects').doc(newProjectId).set(newProject);
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addProjectModal'));
+                    modal.hide();
+                    document.getElementById('addProjectForm').reset();
+                    showAlert('Project added successfully!');
+                } catch (error) {
+                    alert('Error adding project: ' + error.message);
+                }
+            } else {
+                alert('Please fill all required fields');
+            }
+        }
+
+        // Delete project
+        async function deleteProject(projectId) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                try {
+                    await db.collection('projects').doc(projectId).delete();
+                    showAlert('Project deleted successfully!');
+                } catch (error) {
+                    alert('Error deleting project: ' + error.message);
+                }
+            }
+        }
+
+        // Edit project
+        async function editProject(projectId) {
+            try {
+                const projectDoc = await db.collection('projects').doc(projectId).get();
+                const project = projectDoc.data();
+                
+                if (project) {
+                    document.getElementById('projectTitle').value = project.title;
+                    document.getElementById('projectDescription').value = project.description;
+                    document.getElementById('projectCategory').value = project.category;
+                    document.getElementById('projectIcon').value = project.icon;
+                    document.getElementById('projectTags').value = project.tags.join(', ');
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('addProjectModal'));
+                    document.getElementById('addProjectModalLabel').textContent = 'Edit Project';
+                    
+                    const submitBtn = document.querySelector('#addProjectModal .btn-cyber-primary');
+                    submitBtn.textContent = 'Update Project';
+                    submitBtn.onclick = function() { updateProject(projectId); };
+                    
+                    modal.show();
+                }
+            } catch (error) {
+                alert('Error loading project: ' + error.message);
+            }
+        }
+
+        // Update project
+        async function updateProject(projectId) {
+            const title = document.getElementById('projectTitle').value;
+            const description = document.getElementById('projectDescription').value;
+            const category = document.getElementById('projectCategory').value;
+            const icon = document.getElementById('projectIcon').value;
+            const tags = document.getElementById('projectTags').value.split(',').map(tag => tag.trim());
+            
+            if (title && description && category && icon) {
+                try {
+                    const updatedProject = {
+                        title,
+                        description,
+                        category,
+                        icon,
+                        tags
+                    };
+                    
+                    await db.collection('projects').doc(projectId).update(updatedProject);
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addProjectModal'));
+                    modal.hide();
+                    showAlert('Project updated successfully!');
+                    resetProjectModal();
+                } catch (error) {
+                    alert('Error updating project: ' + error.message);
+                }
+            } else {
+                alert('Please fill all required fields');
+            }
+        }
+
+        // Reset project modal
+        function resetProjectModal() {
+            document.getElementById('addProjectForm').reset();
+            document.getElementById('addProjectModalLabel').textContent = 'Add New Project';
+            const submitBtn = document.querySelector('#addProjectModal .btn-cyber-primary');
+            submitBtn.textContent = 'Add Project';
+            submitBtn.onclick = function() { addProject(); };
+        }
+
+        // View message details
+        async function viewMessage(messageId) {
+            try {
+                const messageDoc = await db.collection('messages').doc(messageId).get();
+                const message = messageDoc.data();
+                
+                if (message) {
+                    const date = message.timestamp ? new Date(message.timestamp.seconds * 1000).toLocaleString() : 'N/A';
+                    alert(`Message Details:\n\nName: ${message.name}\nEmail: ${message.email}\nSubject: ${message.subject}\nMessage: ${message.message}\nDate: ${date}`);
+                }
+            } catch (error) {
+                alert('Error loading message: ' + error.message);
+            }
+        }
+
+        // Delete message
+        async function deleteMessage(messageId) {
+            if (confirm('Are you sure you want to delete this message?')) {
+                try {
+                    await db.collection('messages').doc(messageId).delete();
+                    showAlert('Message deleted successfully!');
+                } catch (error) {
+                    alert('Error deleting message: ' + error.message);
+                }
+            }
+        }
+
+        // About form submission
+        document.getElementById('aboutForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const aboutData = {
+                name: document.getElementById('adminAboutName').value,
+                content: document.getElementById('adminAboutContent').value,
+                email: document.getElementById('adminAboutEmail').value,
+                location: document.getElementById('adminAboutLocation').value
+            };
+            
+            try {
+                await db.collection('portfolio').doc('about').set(aboutData);
+                showAlert('About section updated successfully!');
+            } catch (error) {
+                alert('Error updating about section: ' + error.message);
+            }
+        });
+
+        // Contact form submission
+        document.getElementById('contactAdminForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const contactData = {
+                email: document.getElementById('adminContactEmail').value,
+                phone: document.getElementById('adminContactPhone').value,
+                location: document.getElementById('adminContactLocation').value
+            };
+            
+            try {
+                await db.collection('portfolio').doc('contact').set(contactData);
+                showAlert('Contact information updated successfully!');
+            } catch (error) {
+                alert('Error updating contact information: ' + error.message);
+            }
+        });
+
+        // Contact form submission (main website)
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            if (name && email && subject && message) {
+                try {
+                    const messageData = {
+                        name,
+                        email,
+                        subject,
+                        message,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+                    
+                    await db.collection('messages').add(messageData);
+                    
+                    alert('Thank you for your message! I will get back to you soon.');
+                    document.getElementById('contactForm').reset();
+                } catch (error) {
+                    alert('Error sending message: ' + error.message);
+                }
+            } else {
+                alert('Please fill all required fields');
+            }
+        });
+
+        // Show alert
+        function showAlert(message) {
+            const alert = document.getElementById('updateAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            
+            alertMessage.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                showMainWebsite();
+            }
+        }
+
+        // Admin Login Form Submission
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const alertDiv = document.getElementById('loginAlert');
+            const alertMessage = document.getElementById('alertMessage');
+            
+            // Simple validation for demo purposes
+            if (username === 'admin' && password === 'admin123') {
+                showAdminPanel();
+            } else {
+                alertMessage.textContent = 'Invalid login credentials. Please try again.';
+                alertDiv.classList.remove('d-none');
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // Attach project filters
+        function attachProjectFilters() {
+            const filterButtons = document.querySelectorAll('[data-filter]');
+            const projectItems = document.querySelectorAll('#projects-grid > div');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    projectItems.forEach(item => {
+                        if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        }
+
+        // Typing Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            const typingText = document.getElementById('typing-text');
+            const texts = [
+                "Building secure digital solutions for the future.",
+                "Protecting systems from modern cyber threats.",
+                "Developing robust and scalable applications.",
+                "Specializing in cybersecurity and full-stack development."
+            ];
+            let textIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+            let typingSpeed = 100;
+
+            function type() {
+                const currentText = texts[textIndex];
+                
+                if (isDeleting) {
+                    typingText.textContent = currentText.substring(0, charIndex - 1);
+                    charIndex--;
+                    typingSpeed = 50;
+                } else {
+                    typingText.textContent = currentText.substring(0, charIndex + 1);
+                    charIndex++;
+                    typingSpeed = 100;
+                }
+
+                if (!isDeleting && charIndex === currentText.length) {
+                    isDeleting = true;
+                    typingSpeed = 1000;
+                } else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    textIndex = (textIndex + 1) % texts.length;
+                    typingSpeed = 500;
+                }
+
+                setTimeout(type, typingSpeed);
+            }
+
+            setTimeout(type, 1000);
+
+            // Matrix Background
+            const canvas = document.getElementById('matrixCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const chars = "01";
+            const charArray = chars.split("");
+            const font_size = 14;
+            const columns = canvas.width / font_size;
+            const drops = [];
+            
+            for (let x = 0; x < columns; x++) {
+                drops[x] = Math.floor(Math.random() * canvas.height / font_size);
+            }
+            
+            function drawMatrix() {
+                ctx.fillStyle = "rgba(10, 10, 10, 0.04)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#0f0";
+                ctx.font = font_size + "px 'JetBrains Mono', monospace";
+                
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * font_size, drops[i] * font_size);
+                    
+                    if (drops[i] * font_size > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    
+                    drops[i]++;
+                }
+            }
+            
+            window.addEventListener('resize', function() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            setInterval(drawMatrix, 35);
+
+            // Initialize theme
+            initTheme();
+            
+            // Initialize Firebase data
+            initializeData();
+        });
+    </script>
+</body>
+</html> 
